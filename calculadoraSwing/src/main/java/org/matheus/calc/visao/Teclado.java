@@ -1,9 +1,13 @@
 package org.matheus.calc.visao;
 
+import org.matheus.calc.modelo.Memoria;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Teclado extends JPanel {
+public class Teclado extends JPanel implements ActionListener {
     private final Color COR_CINZA_ESCURO = new Color(68,68,68);
     private final Color COR_CINZA_CLARO = new Color(99,99,99);
     private final Color COR_LARANJA = new Color(242,173,60);
@@ -14,9 +18,13 @@ public class Teclado extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
 
         setLayout(layout);
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.BOTH;
 
+        c.gridwidth = 3;
         adicionarBotao("AC",COR_CINZA_ESCURO,c,0,0);
-        adicionarBotao("+/-",COR_CINZA_ESCURO,c,1,0);
+        c.gridwidth = 1;
         adicionarBotao("%",COR_CINZA_ESCURO,c,2,0);
         adicionarBotao("/",COR_LARANJA,c,3,0);
 
@@ -35,8 +43,9 @@ public class Teclado extends JPanel {
         adicionarBotao("3",COR_CINZA_CLARO,c,2,3);
         adicionarBotao("+",COR_LARANJA,c,3,3);
 
+        c.gridwidth = 2;
         adicionarBotao("0",COR_CINZA_CLARO,c,0,4);
-        adicionarBotao("0",COR_CINZA_CLARO,c,1,4);
+        c.gridwidth = 1;
         adicionarBotao(",",COR_CINZA_CLARO,c,2,4);
         adicionarBotao("=",COR_LARANJA,c,3,4);
 
@@ -46,6 +55,15 @@ public class Teclado extends JPanel {
         c.gridx = x;
         c.gridy = y;
         Botao botao = new Botao(texto,cor);
+        botao.addActionListener(this);
         add(botao,c);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof JButton){
+            JButton botao = (JButton) e.getSource();
+            Memoria.getInstance().processadorComando(botao.getText());
+        }
     }
 }
